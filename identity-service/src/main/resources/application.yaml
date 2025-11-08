@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: identity-service
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:finflow@123}
+  datasource:
+    url: jdbc:postgresql://localhost:5432/finflow_db
+    username: ${DB_USERNAME:finflow_admin_1}
+    password: ${DB_PASSWORD:admin@123}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        default_schema: identity_schema
+
+server:
+  port: ${PORT:4600}
+  servlet:
+    context-path: /identity
+  shutdown:
+    grace-period-seconds: 30
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: ${REGISTRY_1:http://localhost:4400}/eureka/,${REGISTRY_2:http://localhost:4400}/eureka/
+  instance:
+    leaseRenewalIntervalInSeconds: 30
+    leaseExpirationDurationInSeconds: 60
+    preferIpAddress: true
+
+app:
+  security:
+    refresh-token:
+      expiration-days: 7

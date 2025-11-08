@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: discovery-service
+server:
+  port: ${PORT:4400}
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: ${EUREKA_HOST_1:http://localhost:4400}/eureka/,${EUREKA_HOST_2:http://localhost:4400}/eureka/
+  server:
+    enableSelfPreservation: false
+    evictionIntervalTimerInMs: 60000
+  instance:
+    leaseRenewalIntervalInSeconds: 30
+    leaseExpirationDurationInSeconds: 60
+    preferIpAddress: true

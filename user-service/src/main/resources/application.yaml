@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: user-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/finflow_db
+    username: ${DB_USERNAME:finflow_admin_1}
+    password: ${DB_PASSWORD:admin@123}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        default_schema: user_schema
+
+server:
+  port: ${PORT:4500}
+  servlet:
+    context-path: /user
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: >
+        ${REGISTRY_1:http://localhost:4400}/eureka/,
+        ${REGISTRY_2:http://localhost:4400}/eureka/
+  instance:
+    prefer-ip-address: true
+    leaseRenewalIntervalInSeconds: 30
+    leaseExpirationDurationInSeconds: 60
+#    health-check-url-path: ${server.servlet.context-path}/actuator/health
+#    metadata-map:
+#      management.context-path: ${server.servlet.context-path}/actuator
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS

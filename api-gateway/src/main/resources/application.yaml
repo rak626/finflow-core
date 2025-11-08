@@ -1,0 +1,50 @@
+server:
+  port: ${PORT:4300}
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: user-service
+              uri: lb://user-service
+              predicates:
+                - Path=/user/**
+            - id: identity-service
+              uri: lb://identity-service
+              predicates:
+                - Path=/identity/**
+#          discovery:
+#            locator:
+#              enabled: false # or true if you want dynamic routes
+#              lower-case-service-id: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: >
+        ${REGISTRY_1:http://localhost:4400}/eureka/,
+        ${REGISTRY_2:http://localhost:4400}/eureka/
+#    fetch-registry: true
+#    register-with-eureka: true
+  instance:
+    prefer-ip-address: true
+    leaseRenewalIntervalInSeconds: 30
+    leaseExpirationDurationInSeconds: 60
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    gateway:
+      access: UNRESTRICTED
+
+identity:
+  service:
+    url: ${IDENTITY_URL:http://localhost:4600}
+
