@@ -24,18 +24,19 @@ server:
   port: ${PORT:4600}
   servlet:
     context-path: /identity
-  shutdown:
-    grace-period-seconds: 30
+#  shutdown:
+#    grace-period-seconds: 30
 eureka:
   client:
     fetch-registry: true
     register-with-eureka: true
     service-url:
       defaultZone: ${REGISTRY_1:http://localhost:4400}/eureka/,${REGISTRY_2:http://localhost:4400}/eureka/
+    registry-fetch-interval-seconds: 15
   instance:
-    leaseRenewalIntervalInSeconds: 30
-    leaseExpirationDurationInSeconds: 60
     preferIpAddress: true
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 90
 
 app:
   security:

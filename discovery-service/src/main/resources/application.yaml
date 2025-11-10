@@ -9,10 +9,13 @@ eureka:
     fetchRegistry: false
     serviceUrl:
       defaultZone: ${EUREKA_HOST_1:http://localhost:4400}/eureka/,${EUREKA_HOST_2:http://localhost:4400}/eureka/
+    registry-fetch-interval-seconds: 15
   server:
-    enableSelfPreservation: false
-    evictionIntervalTimerInMs: 60000
+    enable-self-preservation: true
+    eviction-interval-timer-in-ms: 60000
   instance:
-    leaseRenewalIntervalInSeconds: 30
-    leaseExpirationDurationInSeconds: 60
     preferIpAddress: true
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 90
+
+

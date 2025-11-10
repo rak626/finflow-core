@@ -25,13 +25,12 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: >
-        ${REGISTRY_1:http://localhost:4400}/eureka/,
-        ${REGISTRY_2:http://localhost:4400}/eureka/
+      defaultZone: ${REGISTRY_1:http://localhost:4400}/eureka/,${REGISTRY_2:http://localhost:4400}/eureka/
+    registry-fetch-interval-seconds: 15
   instance:
     prefer-ip-address: true
-    leaseRenewalIntervalInSeconds: 30
-    leaseExpirationDurationInSeconds: 60
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 90
 #    health-check-url-path: ${server.servlet.context-path}/actuator/health
 #    metadata-map:
 #      management.context-path: ${server.servlet.context-path}/actuator
@@ -44,3 +43,4 @@ management:
   endpoint:
     health:
       show-details: ALWAYS
+
