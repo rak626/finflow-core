@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -24,25 +25,35 @@ public class RefreshToken {
     private UUID userId;
 
     @Column(nullable = false, updatable = false)
+    private String username;
+
+    @Column(nullable = false, updatable = false)
     private String deviceId;
 
     @Column(nullable = false, updatable = false)
-    private String token;
+    private String tokenHash;
+
+    @Column(nullable = false, updatable = false)
+    private Instant issuedAt;
+
+    @Column(nullable = false, updatable = false)
+    private Instant expiresAt;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private RefreshTokenStatus status;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean isRevoked = Boolean.FALSE;
+
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
-    private LocalDateTime expireAt;  // set only in service layer
-
     private String ipAddress;
 
-    @PrePersist
-    private void generateToken() {
-        this.token = UUID.randomUUID().toString();
-    }
-
     public boolean isExpired() {
-        return LocalDateTime.now().isAfter(this.expireAt);
+        return Instant.now().isAfter(expiresAt);
     }
 }

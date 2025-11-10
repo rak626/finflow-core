@@ -1,11 +1,10 @@
-package com.rakesh.finflow.identity.dto;
+package com.rakesh.finflow.common.dto.identity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.rakesh.finflow.identity.entity.TokenStatus;
+import com.rakesh.finflow.common.entity.identity.TokenStatus;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -18,4 +17,5 @@ public class TokenResponse {
     private Set<TokenStatus> status;
     private String error_message;
     private UUID userId;
+    private String username;
 }

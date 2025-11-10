@@ -9,35 +9,30 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user_profiles")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
+public class UserProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false, columnDefinition = "varchar(50)")
+    @Column(nullable = false, length = 50)
     private String email;
 
-    @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false, columnDefinition = "varchar(100)")
+    @Column(length = 100)
     private String name;
 
-    @Column(nullable = false, columnDefinition = "varchar(20)")
-    private String userName;
+    @Column(nullable = false, length = 20, unique = true)
+    private String username;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "varchar(20)")
+    @Column(nullable = false, length = 20)
     private Currency currency;
-
-    private LocalDateTime lastLoginTime;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

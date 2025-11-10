@@ -2,14 +2,9 @@ package com.rakesh.finflow.identity.dto;
 
 import lombok.Data;
 
-import java.util.UUID;
-
 @Data
-public class AuthRequest {
-
-    private UUID userId;
+public class TokenRequest {
+    private String refreshToken;
     private String deviceId;
     private String ipAddress;
 }
-
-

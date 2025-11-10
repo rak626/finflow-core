@@ -4,12 +4,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableJpaRepositories(value = {"com.rakesh.finflow.common.repo.*", "com.rakesh.finflow.identity.*"})
-@EntityScan(value = {"com.rakesh.finflow.common.entity.*", "com.rakesh.finflow.identity.*"})
+//@EnableJpaRepositories(value = {"com.rakesh.finflow.common.repo.*", "com.rakesh.finflow.identity.*"})
+//@EntityScan(value = {"com.rakesh.finflow.common.entity.*", "com.rakesh.finflow.identity.*"})
+@EnableFeignClients(basePackages = {"com.rakesh.finflow.common.feign.clients"})
 public class IdentityServiceApplication {
 
     public static void main(String[] args) {

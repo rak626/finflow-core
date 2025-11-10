@@ -1,5 +1,7 @@
 package com.rakesh.finflow.api.gateway.filter;
 
+//import com.rakesh.finflow.common.dto.identity.TokenResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,6 +10,7 @@ import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -20,10 +23,8 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
     private static final Logger log = LoggerFactory.getLogger(AuthenticationFilter.class);
 
     private final WebClient webClient;
-    private final String identityUrl;
 
     public AuthenticationFilter(@Value("${identity.service.url}") String identityUrl, WebClient.Builder builder) {
-        this.identityUrl = identityUrl;
         this.webClient = builder.baseUrl(identityUrl).build();
     }
 
@@ -49,33 +50,29 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
             return exchange.getResponse().setComplete();
         }
 
+//        return chain.filter(exchange);
+
         // Validate token via Identity Service
         return webClient.post()
-                .uri("/identity/auth/authorize")
+                .uri("/api/v1/auth/introspective")
                 .header(HttpHeaders.AUTHORIZATION, authHeader)
-                .header("userId", request.getHeaders().getFirst("userId"))
-                .exchangeToMono(response -> {
-                    if (response.statusCode().is2xxSuccessful()) {
-                        return chain.filter(exchange);
-                    }
-                    log.warn("Unauthorized for {}", path);
-                    exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                    return exchange.getResponse().setComplete();
-                })
+                .retrieve()
+                .onStatus(HttpStatusCode::isError, response ->
+                        Mono.error(new RuntimeException("Invalid token"))
+                )
+                .toBodilessEntity()
+                .flatMap(response -> chain.filter(exchange))
                 .onErrorResume(ex -> {
-                    log.error("Auth service error for {}: {}", path, ex.getMessage());
+                    log.warn("Unauthorized request to {} - {}", path, ex.getMessage());
                     exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                     return exchange.getResponse().setComplete();
                 });
-
     }
 
     private boolean isPublicEndpoint(String path) {
-        return path.startsWith("/auth/login")
-                || path.startsWith("/auth/refresh")
-                || path.startsWith("/identity/auth/authenticate")
-                || path.startsWith("/identity/auth/authorize")
-                || path.startsWith("/public");
+        return path.startsWith("/identity/api/v1/auth/refresh")
+                || path.startsWith("/identity/api/v1/auth/register")
+                || path.startsWith("/identity/api/v1/auth/login");
     }
 
 }

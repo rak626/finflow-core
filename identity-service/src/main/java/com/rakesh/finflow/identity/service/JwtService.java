@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.text.ParseException;
 import java.time.Instant;
 import java.util.Date;
 
@@ -22,10 +23,10 @@ public class JwtService {
     private final RSAPrivateKey privateKey;
     private final RSAPublicKey publicKey;
 
-    public String generateAccessToken(String userId) throws JOSEException {
+    public String generateAccessToken(String username) throws JOSEException {
         Instant now = Instant.now();
         JWTClaimsSet claims = new JWTClaimsSet.Builder()
-                .subject(userId)
+                .subject(username)
                 .issueTime(Date.from(now))
                 .expirationTime(Date.from(now.plusSeconds(900))) // 15 min
                 .issuer("identity-service")
@@ -49,6 +50,15 @@ public class JwtService {
             return expiry.after(new Date());
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    public String getUsernameFromJWT(String token) {
+        try {
+            SignedJWT jwt = SignedJWT.parse(token);
+            return jwt.getJWTClaimsSet().getSubject();
+        } catch (ParseException e) {
+            throw new RuntimeException("Invalid JWT token", e);
         }
     }
 }

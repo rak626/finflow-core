@@ -1,4 +1,4 @@
-package com.rakesh.finflow.identity.entity;
+package com.rakesh.finflow.common.entity.identity;
 
 
 public enum TokenStatus {

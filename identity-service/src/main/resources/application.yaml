@@ -39,5 +39,15 @@ eureka:
 
 app:
   security:
+    login-attempts: 5
     refresh-token:
       expiration-days: 7
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+#    org.springframework.security.web.FilterChainProxy: DEBUG
+#    org.springframework.security.web.access.intercept.FilterSecurityInterceptor: DEBUG
+#    org.springframework.security.authentication: DEBUG
+
+
