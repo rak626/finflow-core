@@ -22,6 +22,7 @@
         <module name="user-service" />
         <module name="identity-service" />
         <module name="discovery-service" />
+        <module name="common-cache" />
         <module name="common-core" />
       </profile>
     </annotationProcessing>
@@ -29,6 +30,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api-gateway" options="-parameters" />
+      <module name="common-cache" options="-parameters" />
       <module name="common-core" options="-parameters" />
       <module name="common-kafka" options="-parameters" />
       <module name="common-util" options="-parameters" />

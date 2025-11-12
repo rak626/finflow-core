@@ -1,4 +1,4 @@
-package com.rakesh.finflow.identity.config;
+package com.rakesh.finflow.common.cache.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,7 @@
 package com.rakesh.finflow.identity.service;
 
 import com.nimbusds.jose.JOSEException;
+import com.rakesh.finflow.common.cache.service.RedisService;
 import com.rakesh.finflow.common.dto.identity.TokenResponse;
 import com.rakesh.finflow.identity.dto.TokenRequest;
 import com.rakesh.finflow.identity.entity.RefreshToken;
@@ -17,7 +18,6 @@ import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -50,7 +50,7 @@ public class RefreshTokenService {
                 .build();
 
         refreshTokenRepository.save(refreshToken);
-        redisService.save(REFRESH_PREFIX + userCredential + deviceId, hashedToken, refreshTokenProperties.getExpiryDays(), TimeUnit.DAYS);
+        redisService.save(REFRESH_PREFIX + userCredential.getUsername() + userCredential.getId() + deviceId, hashedToken, refreshTokenProperties.getExpiryDays(), TimeUnit.DAYS);
         return rawToken;
     }
 

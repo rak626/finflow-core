@@ -44,6 +44,11 @@
             <artifactId>common-kafka</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.rakesh</groupId>
+            <artifactId>common-cache</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
         <!--        External Dependencies-->
 
