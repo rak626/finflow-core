@@ -7,10 +7,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@SpringBootApplication(scanBasePackages = {"com.rakesh.finflow.common.kafka", "com.rakesh.finflow.identity"})
+@SpringBootApplication(scanBasePackages = {"com.rakesh.finflow.common", "com.rakesh.finflow.identity"})
 @EnableDiscoveryClient
-@EnableJpaRepositories(basePackages = {"com.rakesh.finflow.common.kafka", "com.rakesh.finflow.identity"})
-@EntityScan(basePackages = {"com.rakesh.finflow.common.entity", "com.rakesh.finflow.identity", "com.rakesh.finflow.common.kafka"})
+@EnableJpaRepositories(basePackages = {"com.rakesh.finflow.common", "com.rakesh.finflow.identity"})
+@EntityScan(basePackages = {"com.rakesh.finflow.common", "com.rakesh.finflow.identity"})
 @EnableFeignClients(basePackages = {"com.rakesh.finflow.common.feign.clients"})
 public class IdentityServiceApplication {
 
