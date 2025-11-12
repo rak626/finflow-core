@@ -35,9 +35,17 @@
         <!--        Internal Dependencies   -->
         <dependency>
             <groupId>com.rakesh</groupId>
-            <artifactId>common-module</artifactId>
+            <artifactId>common-core</artifactId>
             <version>1.0.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.rakesh</groupId>
+            <artifactId>common-kafka</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--        External Dependencies-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

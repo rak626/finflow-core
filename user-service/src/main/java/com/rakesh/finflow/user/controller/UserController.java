@@ -1,6 +1,6 @@
 package com.rakesh.finflow.user.controller;
 
-import com.rakesh.finflow.common.entity.userservice.UserProfile;
+import com.rakesh.finflow.user.entity.UserProfile;
 import com.rakesh.finflow.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

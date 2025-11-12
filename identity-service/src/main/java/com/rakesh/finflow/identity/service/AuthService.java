@@ -2,14 +2,17 @@ package com.rakesh.finflow.identity.service;
 
 import com.nimbusds.jose.JOSEException;
 import com.rakesh.finflow.common.dto.identity.TokenResponse;
-import com.rakesh.finflow.common.entity.userservice.UserProfile;
+import com.rakesh.finflow.common.dto.user.UserKafkaDto;
 import com.rakesh.finflow.common.entity.userservice.UserStatus;
-import com.rakesh.finflow.common.feign.clients.UserServiceClient;
+import com.rakesh.finflow.common.kafka.common.KafkaProperties;
+import com.rakesh.finflow.common.kafka.producer.MyKafkaProducer;
+import com.rakesh.finflow.common.kafka.util.MessageType;
 import com.rakesh.finflow.identity.dto.LoginRequest;
 import com.rakesh.finflow.identity.dto.SignUpRequest;
 import com.rakesh.finflow.identity.entity.UserCredential;
 import com.rakesh.finflow.identity.repository.UserCredentialRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,14 +22,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthService {
 
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final RefreshTokenService refreshTokenService;
-    private final UserServiceClient userServiceClient;
     private final UserCredentialRepository userCredentialRepository;
+    private final MyKafkaProducer kafkaProducer;
+    private final KafkaProperties kafkaProperties;
 
 
     public void addUser(SignUpRequest request) {
@@ -45,16 +50,17 @@ public class AuthService {
                         .role("ROLE_USER")
                         .status(UserStatus.ACTIVE)
                         .build();
-        UserProfile userProfile = UserProfile
+        userCredentialRepository.save(userCredential);
+
+        UserKafkaDto userKafkaDto = UserKafkaDto
                 .builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .name(request.getName())
                 .build();
-        userCredentialRepository.save(userCredential);
 
         // call kafka to save
-        userServiceClient.createUser(userProfile);
+        kafkaProducer.send(kafkaProperties.getUserTopic(), userKafkaDto.getUsername(), userKafkaDto, MessageType.USER_DETAILS);
     }
 
     public TokenResponse login(LoginRequest request) throws JOSEException {

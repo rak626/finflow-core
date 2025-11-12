@@ -1,6 +1,5 @@
 package com.rakesh.finflow.identity.repository;
 
-import com.rakesh.finflow.common.entity.userservice.UserProfile;
 import com.rakesh.finflow.identity.entity.UserCredential;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;

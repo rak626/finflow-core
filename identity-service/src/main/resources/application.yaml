@@ -1,3 +1,10 @@
+server:
+  port: ${PORT:4600}
+  servlet:
+    context-path: /identity
+#  shutdown:
+#    grace-period-seconds: 30
+
 spring:
   application:
     name: identity-service
@@ -19,13 +26,32 @@ spring:
       hibernate:
         format_sql: true
         default_schema: identity_schema
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+      properties:
+        acks: all
+        retries: 2
+        retry.backoff.ms: 1000
+        linger.ms: 1
+        batch.size: 16384
+        buffer.memory: 33554432
+        max.block.ms: 5000
+        request.timeout.ms: 15000
+        delivery.timeout.ms: 20000
 
-server:
-  port: ${PORT:4600}
-  servlet:
-    context-path: /identity
-#  shutdown:
-#    grace-period-seconds: 30
+kafka:
+  topic:
+    user: user-events-finflow
+#  consumer:
+#    group-id:
+#      user-group: user-events-group
+    dlq.topic: my-dlq-topic-lnps
+    max-attempts: 3
+    concurrency: 3
+
 eureka:
   client:
     fetch-registry: true
@@ -50,5 +76,4 @@ logging:
 #    org.springframework.security.web.FilterChainProxy: DEBUG
 #    org.springframework.security.web.access.intercept.FilterSecurityInterceptor: DEBUG
 #    org.springframework.security.authentication: DEBUG
-
 

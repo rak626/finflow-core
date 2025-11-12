@@ -1,7 +1,6 @@
 package com.rakesh.finflow.identity.config;
 
 
-import com.rakesh.finflow.common.repo.userservice.UserProfileRepository;
 import com.rakesh.finflow.identity.filter.IdentitySecurityFilter;
 import com.rakesh.finflow.identity.repository.UserCredentialRepository;
 import com.rakesh.finflow.identity.security.CustomAuthenticationProvider;

@@ -1,0 +1,12 @@
+/home/rakesh/development/java/finflow/common-module/common-kafka/src/main/java/com/rakesh/finflow/common/kafka/common/KafkaProperties.java
+/home/rakesh/development/java/finflow/common-module/common-kafka/src/main/java/com/rakesh/finflow/common/kafka/condition/ConditionUser.java
+/home/rakesh/development/java/finflow/common-module/common-kafka/src/main/java/com/rakesh/finflow/common/kafka/consumer/KafkaConsumerUser.java
+/home/rakesh/development/java/finflow/common-module/common-kafka/src/main/java/com/rakesh/finflow/common/kafka/consumer/config/KafkaConsumerConfig.java
+/home/rakesh/development/java/finflow/common-module/common-kafka/src/main/java/com/rakesh/finflow/common/kafka/consumer/processor/KafkaMessageProcessor.java
+/home/rakesh/development/java/finflow/common-module/common-kafka/src/main/java/com/rakesh/finflow/common/kafka/entity/FailedMessage.java
+/home/rakesh/development/java/finflow/common-module/common-kafka/src/main/java/com/rakesh/finflow/common/kafka/producer/MyKafkaProducer.java
+/home/rakesh/development/java/finflow/common-module/common-kafka/src/main/java/com/rakesh/finflow/common/kafka/producer/MyKafkaProducerDefault.java
+/home/rakesh/development/java/finflow/common-module/common-kafka/src/main/java/com/rakesh/finflow/common/kafka/repository/KafkaFailedMessageRepository.java
+/home/rakesh/development/java/finflow/common-module/common-kafka/src/main/java/com/rakesh/finflow/common/kafka/schedular/FailedMessageRetryScheduler.java
+/home/rakesh/development/java/finflow/common-module/common-kafka/src/main/java/com/rakesh/finflow/common/kafka/util/MessageType.java
+/home/rakesh/development/java/finflow/common-module/common-kafka/src/main/java/com/rakesh/finflow/common/kafka/util/SerializationUtils.java

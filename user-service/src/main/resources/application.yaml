@@ -14,6 +14,18 @@ spring:
       hibernate:
         format_sql: true
         default_schema: user_schema
+  kafka:
+    bootstrap-servers: localhost:9092
+
+kafka:
+  topic:
+    user: user-events-finflow
+  consumer:
+    group-id:
+      user-group: user-events-group
+  dlq.topic: my-dlq-topic-lnps
+  max-attempts: 3
+  concurrency: 3
 
 server:
   port: ${PORT:4500}
