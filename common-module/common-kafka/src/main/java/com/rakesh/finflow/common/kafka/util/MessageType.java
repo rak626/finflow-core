@@ -1,5 +1,5 @@
 package com.rakesh.finflow.common.kafka.util;
 
 public enum MessageType {
-    USER_DETAILS
+    TRANSACTION_DETAILS, USER_DETAILS
 }

@@ -1,3 +1,59 @@
+server:
+  port: ${PORT:4700}
+  servlet:
+    context-path: /transaction
 spring:
   application:
     name: transaction-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/finflow_db
+    username: ${DB_USERNAME:finflow_admin_1}
+    password: ${DB_PASSWORD:admin@123}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        default_schema: transaction_schema
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+      properties:
+        acks: all
+        enable.idempotence: true
+        retries: 10
+        linger.ms: 5
+        batch.size: 32768
+        compression.type: lz4
+        max.in.flight.requests.per.connection: 5
+        delivery.timeout.ms: 30000
+        request.timeout.ms: 20000
+
+
+kafka:
+  topic:
+    transaction: transaction-events-finflow
+  consumer:
+    group-id:
+      transaction-group: transaction-events-group
+  dlq.topic: my-dlq-topic-lnps
+  max-attempts: 3
+  concurrency: 3
+
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: ${REGISTRY_1:http://localhost:4400}/eureka/,${REGISTRY_2:http://localhost:4400}/eureka/
+    registry-fetch-interval-seconds: 15
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 90
