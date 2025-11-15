@@ -44,8 +44,9 @@ public class TransactionService {
         this.addTransaction(transaction);
     }
 
-    public void addAllTransaction(List<TransactionDto> dtoList) {
+    public void addAllTransaction(List<TransactionDto> dtoList, String userProfileId) {
         dtoList.forEach(dto -> {
+            dto.setUserProfileId(userProfileId);
             producer.send(kafkaProperties.getTransactionTopic(), String.valueOf(dto.getUserProfileId()), dto, MessageType.TRANSACTION_DETAILS);
         });
     }
@@ -56,7 +57,7 @@ public class TransactionService {
 
     public TransactionSearchResponse search(TransactionSearchRequest req,
                                             int page, int size, String sortBy, String sortingOrder,
-                                            UUID userProfileId) {
+                                            String userProfileId) {
 
         validator.validateSortParams(sortBy, sortingOrder, req);
         // Build sort

@@ -16,6 +16,7 @@ public class UserKafkaDto implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    private String userProfileId;
     private UserEventType userEventType;
     private String email;
     private String name;

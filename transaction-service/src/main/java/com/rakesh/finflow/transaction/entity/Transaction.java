@@ -33,7 +33,7 @@ public class Transaction {
     private UUID id;
 
     @Column(name = "user_profile_id", nullable = false, updatable = false)
-    private UUID userProfileId;
+    private String userProfileId;
 
     // ----------------------------------------------------------------------
     // Transaction attributes

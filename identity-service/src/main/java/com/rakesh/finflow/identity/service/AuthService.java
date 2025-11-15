@@ -11,6 +11,7 @@ import com.rakesh.finflow.identity.dto.LoginRequest;
 import com.rakesh.finflow.identity.dto.SignUpRequest;
 import com.rakesh.finflow.identity.entity.UserCredential;
 import com.rakesh.finflow.identity.repository.UserCredentialRepository;
+import com.rakesh.finflow.util.common.UserProfileIdGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,21 +40,22 @@ public class AuthService {
         if (userCredentialRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("Username already exits..");
         }
-
+        log.debug("Generating User Profile ID for new user: {}", request.getUsername());
+        String userProfileId = UserProfileIdGenerator.generate();
         UserCredential userCredential =
                 UserCredential.builder()
-//                        .id(UserIdGenerator.generate())
                         .username(request.getUsername())
-//                        .email(request.getEmail())
                         .password(passwordEncoder.encode(request.getPassword()))
-//                        .name(request.getName())
                         .role("ROLE_USER")
                         .status(UserStatus.ACTIVE)
+                        .userProfileId(userProfileId)
                         .build();
-        userCredentialRepository.save(userCredential);
+        UserCredential savedUserCredential = userCredentialRepository.save(userCredential);
+        log.info("User Credential registered successfully with username: {}", savedUserCredential.getId());
 
         UserKafkaDto userKafkaDto = UserKafkaDto
                 .builder()
+                .userProfileId(userProfileId)
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .name(request.getName())

@@ -19,15 +19,19 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @PostMapping
-    public ResponseEntity<?> addTransactions(@RequestBody List<TransactionDto> dtoList) {
+    public ResponseEntity<?> addTransactions(
+            @RequestHeader(name = "x-user-profile-id") String userProfileId,
+            @RequestBody List<TransactionDto> dtoList) {
         try {
-            transactionService.addAllTransaction(dtoList);
+            transactionService.addAllTransaction(dtoList, userProfileId);
             return ResponseEntity.ok("All Transactions added Successfully");
         } catch (Exception e) {
             return ResponseEntity.noContent().build();
         }
     }
 
+
+    // Todo: only for testing purpose, remove after sometime
     @GetMapping("/all")
     public ResponseEntity<?> getAllTransaction() {
         try {
@@ -44,7 +48,7 @@ public class TransactionController {
             @RequestParam int size,
             @RequestParam(name = "sortBy", required = false) String sortBy,
             @RequestParam(name = "sortingOrder", required = false) String sortingOrder,
-            @RequestHeader("user-profile-id") UUID userProfileId) {
+            @RequestHeader("x-user-profile-id") String userProfileId) {
 
         return transactionService.search(request, page, size, sortBy, sortingOrder, userProfileId);
     }

@@ -10,12 +10,13 @@ import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+
+import java.util.Map;
 
 @Component
 public class AuthenticationFilter implements GlobalFilter, Ordered {
@@ -57,16 +58,25 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
                 .uri("/api/v1/auth/introspective")
                 .header(HttpHeaders.AUTHORIZATION, authHeader)
                 .retrieve()
-                .onStatus(HttpStatusCode::isError, response ->
-                        Mono.error(new RuntimeException("Invalid token"))
-                )
-                .toBodilessEntity()
-                .flatMap(response -> chain.filter(exchange))
+                .bodyToMono(Map.class)
+                .flatMap(introspection -> {
+                    ServerHttpRequest mutatedRequest = exchange.getRequest()
+                            .mutate()
+                            .header("x-user-profile-id", introspection.get("userProfileId").toString())
+                            .header("x-user-roles", introspection.get("roles").toString())
+                            .build();
+
+                    ServerWebExchange mutatedExchange = exchange.mutate()
+                            .request(mutatedRequest)
+                            .build();
+
+                    return chain.filter(mutatedExchange);
+                })
                 .onErrorResume(ex -> {
-                    log.warn("Unauthorized request to {} - {}", path, ex.getMessage());
                     exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                     return exchange.getResponse().setComplete();
                 });
+
     }
 
     private boolean isPublicEndpoint(String path) {

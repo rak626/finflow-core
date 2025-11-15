@@ -75,6 +75,7 @@ public class AuthController {
         UserCredential user = (UserCredential) auth.getPrincipal();
 
         return ResponseEntity.ok(Map.of(
+                "userProfileId", user.getUserProfileId(),
                 "active", true,
                 "username", user.getUsername(),
                 "roles", user.getAuthorities().stream()

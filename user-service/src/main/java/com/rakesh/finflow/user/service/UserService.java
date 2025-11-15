@@ -28,6 +28,7 @@ public class UserService {
     public void consumeKafkaUserDataToDB(UserKafkaDto userKafkaDto) {
         UserProfile userProfile = new UserProfile();
         BeanUtils.copyProperties(userKafkaDto, userProfile);
+        userProfile.setId(userKafkaDto.getUserProfileId());
         userProfileRepo.save(userProfile);
     }
 }

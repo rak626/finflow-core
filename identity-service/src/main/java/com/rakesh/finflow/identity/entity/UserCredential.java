@@ -56,6 +56,10 @@ public class UserCredential implements UserDetails {
     @Builder.Default
     private Boolean isResetRequired = Boolean.FALSE;
 
+
+    @Column(nullable = false, updatable = false, unique = true, length = 15)
+    private String userProfileId;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(this.role));

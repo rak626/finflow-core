@@ -7,7 +7,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "user_profiles")
@@ -19,8 +18,9 @@ import java.util.UUID;
 public class UserProfile {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @Column(nullable = false, updatable = false, unique = true, length = 15)
+    private String id;
+
 
     @Column(nullable = false, length = 50)
     private String email;
